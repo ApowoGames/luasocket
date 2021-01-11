@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 3.10)
 project(LuaSocket)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build/bin)
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build/lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build/bin/socket)
+#set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build/lib)
 
 include_directories(../lua)
-
+add_compile_options(-fPIC)
 
 IF(WIN32)
     SET(luasocket_PLATFORM_SPECIFIC
@@ -65,7 +65,11 @@ SET(luasocketcommon_RESOURCE_FILES
         )
 
 ADD_LIBRARY(luasocket SHARED ${luasocket_PUBLIC_HEADERS} ${luasocket_SOCKET})
-SET_TARGET_PROPERTIES(luasocket PROPERTIES OUTPUT_NAME "luasocket")
-SET_TARGET_PROPERTIES(luasocket PROPERTIES COMPILE_FLAGS "${LUASOCKET_C_FLAGS}")
-TARGET_LINK_LIBRARIES(luasocket ${LUASOCKET_LINK_FLAGS})
+
+SET_TARGET_PROPERTIES(luasocket PROPERTIES
+        PREFIX ""
+        OUTPUT_NAME "core"
+        COMPILE_FLAGS "${LUASOCKET_C_FLAGS}"
+        )
+TARGET_LINK_LIBRARIES(luasocket ${LUASOCKET_LINK_FLAGS} lua)
 
